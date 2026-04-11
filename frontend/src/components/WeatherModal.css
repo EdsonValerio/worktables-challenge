@@ -1,27 +1,18 @@
-/* =============================================
-   WEATHER MODAL — Layout e Espaçamento
-   ============================================= */
+/* frontend/src/components/WeatherModal.css
+   Estilos do modal de detalhes do país — cabeçalho, card de clima e card de estatísticas */
 
-.wm-body {
-  display: flex;
-  flex-direction: column;
-  padding: 4px 24px 24px;
-  gap: 24px; /* Espaçamento uniforme entre os blocos */
-}
-
-
+/* ─── Container principal do modal ─────────────────────────────────────────── */
 .wm-body {
   display: flex;
   flex-direction: column;
   padding: 4px 24px 24px;
   gap: 24px;
-  
-  max-height: 65vh; /* Limita a altura a 65% da altura da aba da monday */
-  overflow-y: auto; /* Adiciona scroll interno se o conteúdo for maior que o limite */
-  scrollbar-width: thin; /* Deixa o scroll mais discreto em navegadores modernos */
+  max-height: 65vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
-/* Opcional: Estilização do scrollbar para ficar com a cara da monday */
+/* Scrollbar discreta (WebKit) */
 .wm-body::-webkit-scrollbar {
   width: 6px;
 }
@@ -30,7 +21,7 @@
   border-radius: 10px;
 }
 
-/* ── CABEÇALHO: Bandeira + Nome lado a lado ── */
+/* ─── Cabeçalho: bandeira + nome do país lado a lado ───────────────────────── */
 .wm-header {
   display: flex;
   flex-direction: row;
@@ -39,6 +30,7 @@
   margin-top: 16px;
 }
 
+/* ─── Bloco da bandeira ─────────────────────────────────────────────────────── */
 .wm-flag {
   flex-shrink: 0;
   width: 90px;
@@ -66,13 +58,14 @@
   background-color: #f7f8f9;
 }
 
+/* ─── Nome do país ──────────────────────────────────────────────────────────── */
 .wm-country-name {
   margin: 0 !important;
   line-height: 1.2;
   color: #323338;
 }
 
-/* ── CARD DE CLIMA (Destaque visual) ── */
+/* ─── Card de clima ─────────────────────────────────────────────────────────── */
 .wm-weather-card {
   background: linear-gradient(135deg, #f0f7ff 0%, #e1eaff 100%);
   border: 1px solid #cce0ff;
@@ -110,7 +103,7 @@
   font-size: 32px !important;
 }
 
-/* ── CARD DE ESTATÍSTICAS ── */
+/* ─── Card de estatísticas ──────────────────────────────────────────────────── */
 .wm-stats-card {
   background-color: #fff;
   border: 1px solid #e1e2e9;
@@ -119,9 +112,10 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
+/* Grid de duas colunas para os campos estatísticos */
 .wm-stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Duas colunas limpas */
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-top: 16px;
 }
@@ -132,7 +126,7 @@
   gap: 4px;
 }
 
-/* Reduzindo o espaçamento nativo do ModalHeader */
+/* ─── Ajuste do espaçamento nativo do ModalHeader do Vibe ───────────────────── */
 #country-modal .monday-style-modal__header {
   padding-bottom: 10px;
 }

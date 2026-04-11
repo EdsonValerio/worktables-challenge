@@ -1,8 +1,12 @@
+// frontend/src/components/WorldMap.tsx
+// Componente do mapa interativo — renderiza marcadores por país e sincroniza hover com a lista
+
 import { useState, useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
 
+// --- Tipos ---
 interface Country {
   id: string;
   name: string;
@@ -15,6 +19,7 @@ interface WorldMapProps {
   hoveredCountryId: string | null;
 }
 
+// --- Utilitário: extrai coordenadas das colunas da monday ---
 function getCoordinates(country: Country): [number, number] | null {
   const latCol = country.column_values.find((c) => c.column.title === 'Latitude');
   const lngCol = country.column_values.find((c) => c.column.title === 'Longitude');
@@ -25,7 +30,7 @@ function getCoordinates(country: Country): [number, number] | null {
   return null;
 }
 
-// ── Tooltip com busca lazy da bandeira ──
+// --- Subcomponente: conteúdo do tooltip com bandeira carregada via lazy fetch ---
 function CountryTooltip({ name }: { name: string }) {
   const [flagUrl, setFlagUrl] = useState<string | null>(null);
   const [fetched, setFetched] = useState(false);
@@ -43,6 +48,7 @@ function CountryTooltip({ name }: { name: string }) {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '2px 0' }}>
+      {/* Bandeira ou placeholder enquanto carrega */}
       {flagUrl ? (
         <img
           src={flagUrl}
@@ -72,11 +78,12 @@ function CountryTooltip({ name }: { name: string }) {
   );
 }
 
+// --- Componente principal ---
 function WorldMap({ countries, onCountryClick, hoveredCountryId }: WorldMapProps) {
-  // Mapa de id → instância Leaflet do CircleMarker
+  // Mapa de id → instância Leaflet do CircleMarker para controle programático do tooltip
   const markerRefs = useRef<Map<string, L.CircleMarker>>(new Map());
 
-  // Abre/fecha o tooltip programaticamente quando o hover da lista muda
+  // Abre/fecha tooltip no mapa quando o item na lista entra/sai de hover
   useEffect(() => {
     markerRefs.current.forEach((marker, id) => {
       if (id === hoveredCountryId) {
@@ -94,10 +101,10 @@ function WorldMap({ countries, onCountryClick, hoveredCountryId }: WorldMapProps
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
     >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      {/* Camada base do mapa */}
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
+      {/* Marcadores dos países */}
       {countries.map((country) => {
         const coords = getCoordinates(country);
         if (!coords) return null;

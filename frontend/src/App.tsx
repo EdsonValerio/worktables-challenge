@@ -1,3 +1,6 @@
+// frontend/src/App.tsx
+// Componente raiz da aplicação — gerencia estado global, busca de dados e layout principal
+
 import { useEffect, useState, useMemo } from 'react';
 import mondaySdk from 'monday-sdk-js';
 
@@ -9,34 +12,34 @@ import CountryList from './components/CountryList';
 import WorldMap from './components/WorldMap';
 import WeatherModal from './components/WeatherModal';
 
-
 import './App.css';
 
+// --- SDK ---
 const monday = mondaySdk();
 
-
-
 function App() {
+  // --- Estado: contexto e dados ---
   const [context, setContext] = useState<any>(null);
   const [countries, setCountries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [mobileListOpen, setMobileListOpen] = useState(false);
 
-  // Estado para guardar o continente escolhido no Dropdown
+  // --- Estado: filtros ---
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
 
+  // --- Estado: UI mobile ---
+  const [mobileListOpen, setMobileListOpen] = useState(false);
 
-
+  // --- Estado: modal de clima ---
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
   const [weatherData, setWeatherData] = useState<any>(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState('');
 
-  // ID do país em hover na lista — sincroniza com o tooltip do mapa
+  // --- Estado: hover sincronizado entre lista e mapa ---
   const [hoveredCountryId, setHoveredCountryId] = useState<string | null>(null);
 
-  // Extrai as regiões únicas (Europa, Ásia, etc.) do array da monday dinamicamente
+  // --- Deriva as regiões únicas a partir dos dados recebidos da monday ---
   const availableRegions = useMemo(() => {
     const regions = new Set<string>();
     countries.forEach((country) => {
@@ -45,34 +48,31 @@ function App() {
         regions.add(regionCol.text);
       }
     });
-    // Converte o Set para o formato { label, value } que o Dropdown exige
     return Array.from(regions).sort().map((r) => ({ label: r, value: r }));
   }, [countries]);
 
+  // --- Efeito: captura o contexto do board da monday ---
   useEffect(() => {
     monday.listen('context', (res) => setContext(res.data));
   }, []);
 
+  // --- Efeito: busca os países assim que o boardId estiver disponível ---
   useEffect(() => {
     if (context?.boardId) {
-      // Usando o limite seguro de 100. (Num projeto real faríamos a paginação com 'cursor')
       const query = `query { boards (ids: ${context.boardId}) { items_page (limit: 250) { items { id name column_values { text column { title } } } } } }`;
-      
+
       monday.api(query)
         .then((res: any) => {
-          // Proteção caso a API retorne um erro GraphQL em vez de dados
           if (res.errors) {
-            console.error("Erro da API da monday:", res.errors);
+            console.error('Erro da API da monday:', res.errors);
             setLoading(false);
             return;
           }
-          
-          // Extrai e salva os itens com segurança
           const fetchedItems = res.data?.boards?.[0]?.items_page?.items || [];
           setCountries(fetchedItems);
         })
         .catch((err) => {
-          console.error("Falha na conexão com a monday:", err);
+          console.error('Falha na conexão com a monday:', err);
         })
         .finally(() => {
           setLoading(false);
@@ -80,18 +80,17 @@ function App() {
     }
   }, [context]);
 
-  // Lógica de Filtro Combinada: Nome + Continente
+  // --- Filtragem combinada: texto + continente ---
   const filteredCountries = countries.filter((country) => {
-    // 1. Checa a busca por texto
     const matchesSearch = country.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // 2. Checa o filtro por continente
     const regionCol = country.column_values.find((c: any) => c.column.title === 'Region');
     const matchesRegion = selectedRegion ? regionCol?.text === selectedRegion : true;
 
     return matchesSearch && matchesRegion;
   });
 
+  // --- Handler: clique em um país → busca clima no backend ---
   const handleCountryClick = async (country: any) => {
     setSelectedCountry(country);
     setWeatherData(null);
@@ -110,8 +109,10 @@ function App() {
     }
   };
 
+  // --- Handler: fecha o modal de clima ---
   const closeModal = () => setSelectedCountry(null);
 
+  // --- Guard: exige boardId para renderizar a aplicação ---
   if (!context?.boardId) {
     return (
       <div className="no-context">
@@ -121,15 +122,14 @@ function App() {
     );
   }
 
+  // --- Render ---
   return (
     <div className="app-wrapper">
 
-    {/* HEADER */}
+      {/* Header */}
       <div style={{ padding: '15px 20px', borderBottom: '1px solid #c3c6d4', backgroundColor: '#fff', zIndex: 10 }}>
         <Flex justify="space-between" align="center">
           <Heading type="h2">World Countries Explorer</Heading>
-          
-
         </Flex>
       </div>
 
@@ -139,10 +139,10 @@ function App() {
         </div>
       ) : (
         <>
-          {/* CONTEÚDO PRINCIPAL */}
+          {/* Conteúdo principal */}
           <div className="app-content">
 
-            {/* MAPA — sempre visível, ocupa toda a área */}
+            {/* Painel do mapa — ocupa a área principal */}
             <div className="map-panel">
               <WorldMap
                 countries={filteredCountries}
@@ -150,7 +150,7 @@ function App() {
                 hoveredCountryId={hoveredCountryId}
               />
 
-              {/* PAINEL FLUTUANTE MOBILE — fica sobre o mapa */}
+              {/* Overlay flutuante — visível apenas no mobile, posicionado sobre o mapa */}
               <div className={`mobile-overlay-panel ${mobileListOpen ? 'open' : ''}`}>
                 <button
                   id="mobile-list-toggle"
@@ -179,7 +179,7 @@ function App() {
               </div>
             </div>
 
-            {/* PAINEL LATERAL — apenas desktop */}
+            {/* Painel lateral — visível apenas no desktop */}
             <div className="side-panel">
               <SearchBar
                 searchTerm={searchTerm}
@@ -200,7 +200,7 @@ function App() {
         </>
       )}
 
-      {/* MODAL DE CLIMA */}
+      {/* Modal de clima */}
       <WeatherModal
         selectedCountry={selectedCountry}
         weatherData={weatherData}
@@ -208,8 +208,6 @@ function App() {
         weatherError={weatherError}
         onClose={closeModal}
       />
-
-
 
     </div>
   );

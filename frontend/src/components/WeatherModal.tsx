@@ -1,3 +1,6 @@
+// frontend/src/components/WeatherModal.tsx
+// Modal de detalhes do país — exibe bandeira, clima (WeatherAPI) e estatísticas (monday.com)
+
 import { useEffect, useState } from 'react';
 import {
   Modal,
@@ -8,6 +11,7 @@ import {
 } from '@vibe/core';
 import './WeatherModal.css';
 
+// --- Tipos ---
 interface Country {
   id: string;
   name: string;
@@ -28,9 +32,10 @@ interface WeatherModalProps {
   onClose: () => void;
 }
 
-// Expandimos as estatísticas para aproveitar o Grid de 2 colunas
+// --- Colunas da monday exibidas no card de estatísticas ---
 const STAT_COLUMNS = ['Region', 'Subregion', 'Capital', 'Population', 'Area'];
 
+// --- Componente ---
 function WeatherModal({
   selectedCountry,
   weatherData,
@@ -40,6 +45,7 @@ function WeatherModal({
 }: WeatherModalProps) {
   const [flagUrl, setFlagUrl] = useState<string | null>(null);
 
+  // Busca a bandeira do país sempre que o país selecionado mudar
   useEffect(() => {
     setFlagUrl(null);
     if (!selectedCountry) return;
@@ -56,11 +62,12 @@ function WeatherModal({
       .catch(() => setFlagUrl(null));
   }, [selectedCountry]);
 
+  // --- Derivações ---
   const capitalCol = selectedCountry?.column_values.find(
     (col) => col.column.title === 'Capital'
   );
   const capital = capitalCol?.text || '';
-  
+
   const modalTitle = selectedCountry
     ? capital
       ? `${selectedCountry.name} - ${capital}`
@@ -71,14 +78,14 @@ function WeatherModal({
     STAT_COLUMNS.includes(col.column.title)
   ) ?? [];
 
+  // --- Render ---
   return (
     <Modal id="country-modal" show={!!selectedCountry} onClose={onClose}>
-      {/* <ModalHeader title={modalTitle} /> */}
       <ModalContent>
         {selectedCountry && (
           <div className="wm-body">
 
-            {/* CABEÇALHO */}
+            {/* Cabeçalho: bandeira à esquerda + nome do país à direita */}
             <div className="wm-header">
               <div className="wm-flag">
                 {flagUrl
@@ -91,7 +98,7 @@ function WeatherModal({
               </Heading>
             </div>
 
-            {/* CARD DE CLIMA (Destaque Azul) */}
+            {/* Card de clima — dados vindos do backend via WeatherAPI */}
             <section className="wm-weather-card">
               <Text type="text1" weight="bold" color="primary">
                 Clima Atual (WeatherAPI)
@@ -102,6 +109,7 @@ function WeatherModal({
 
               {weatherData && (
                 <div className="wm-weather-content">
+                  {/* Ícone do clima */}
                   <div className="wm-weather-icon-wrapper">
                     <img
                       src={weatherData.icon}
@@ -109,6 +117,7 @@ function WeatherModal({
                       className="wm-weather-icon"
                     />
                   </div>
+                  {/* Temperatura e condição */}
                   <div>
                     <Heading type="h2" className="wm-temperature">
                       {weatherData.temp_c}°C
@@ -121,7 +130,7 @@ function WeatherModal({
               )}
             </section>
 
-            {/* CARD DE ESTATÍSTICAS (Grid) */}
+            {/* Card de estatísticas — dados vindos das colunas do board da monday */}
             <section className="wm-stats-card">
               <Text type="text1" weight="bold">
                 Estatísticas (monday.com)

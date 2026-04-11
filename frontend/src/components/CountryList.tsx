@@ -1,5 +1,9 @@
+// frontend/src/components/CountryList.tsx
+// Componente de lista — renderiza os países filtrados e dispara eventos de clique e hover
+
 import { Text } from '@vibe/core';
 
+// --- Tipos ---
 interface Country {
   id: string;
   name: string;
@@ -12,6 +16,7 @@ interface CountryListProps {
   onCountryHover: (id: string | null) => void;
 }
 
+// --- Componente ---
 function CountryList({ countries, onCountryClick, onCountryHover }: CountryListProps) {
   return (
     <ul style={{ listStyleType: 'none', padding: '10px', margin: 0, overflowY: 'auto', flexGrow: 1 }}>
