@@ -2,7 +2,7 @@
 
 This repository contains the complete solution for the Full Stack Developer assessment at Worktables. The application consists of a React/TypeScript front-end integrated with the monday.com Work OS, and a Node.js/Express back-end that provides real-time weather data.
 
-## 🚀 Key Features & Overdelivery
+## Key Features & Overdelivery
 
 While adhering strictly to the core requirements, I implemented several architectural and UX enhancements to deliver a production-ready product:
 
@@ -16,7 +16,7 @@ While adhering strictly to the core requirements, I implemented several architec
 * **Vibe Design System:** Fully implemented using monday.com's modern `@vibe/core` component library (Modals, Dropdowns, Inputs, Loaders, and Typography) for a native look and feel.
 * **Fully Responsive:** Uses a modern tab-based navigation system on mobile devices to switch between the Map and the List seamlessly without breaking the layout.
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 ### Front-end
 * React 18 + Vite
@@ -31,7 +31,7 @@ While adhering strictly to the core requirements, I implemented several architec
 * Axios
 * `dotenv` (Environment variables management)
 
-## ⚙️ How to Run the Project Locally
+## How to Run the Project Locally
 
 This is a Monorepo containing both the Front-end and Back-end architectures.
 
@@ -67,8 +67,6 @@ a. Ensure both the Front-end and Back-end servers are running.
 b. Go to the "World Countries" board on the provided Worktables monday.com account.
 c. Open the DEVELOP HERE Board View.
 
---------
-👨‍💻 Author
 
 Edson Valerio
 
