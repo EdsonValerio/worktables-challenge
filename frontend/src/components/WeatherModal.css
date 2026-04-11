@@ -1,0 +1,138 @@
+/* =============================================
+   WEATHER MODAL — Layout e Espaçamento
+   ============================================= */
+
+.wm-body {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 24px 24px;
+  gap: 24px; /* Espaçamento uniforme entre os blocos */
+}
+
+
+.wm-body {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 24px 24px;
+  gap: 24px;
+  
+  max-height: 65vh; /* Limita a altura a 65% da altura da aba da monday */
+  overflow-y: auto; /* Adiciona scroll interno se o conteúdo for maior que o limite */
+  scrollbar-width: thin; /* Deixa o scroll mais discreto em navegadores modernos */
+}
+
+/* Opcional: Estilização do scrollbar para ficar com a cara da monday */
+.wm-body::-webkit-scrollbar {
+  width: 6px;
+}
+.wm-body::-webkit-scrollbar-thumb {
+  background: #c3c6d4;
+  border-radius: 10px;
+}
+
+/* ── CABEÇALHO: Bandeira + Nome lado a lado ── */
+.wm-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.wm-flag {
+  flex-shrink: 0;
+  width: 90px;
+  height: 60px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e1e2e9;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.wm-flag-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wm-flag-placeholder {
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f7f8f9;
+}
+
+.wm-country-name {
+  margin: 0 !important;
+  line-height: 1.2;
+  color: #323338;
+}
+
+/* ── CARD DE CLIMA (Destaque visual) ── */
+.wm-weather-card {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e1eaff 100%);
+  border: 1px solid #cce0ff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 115, 234, 0.08);
+}
+
+.wm-weather-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.wm-weather-icon-wrapper {
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0, 115, 234, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wm-weather-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.wm-temperature {
+  margin: 0 !important;
+  line-height: 1;
+  color: #0073ea !important;
+  font-size: 32px !important;
+}
+
+/* ── CARD DE ESTATÍSTICAS ── */
+.wm-stats-card {
+  background-color: #fff;
+  border: 1px solid #e1e2e9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.wm-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Duas colunas limpas */
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.wm-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Reduzindo o espaçamento nativo do ModalHeader */
+#country-modal .monday-style-modal__header {
+  padding-bottom: 10px;
+}

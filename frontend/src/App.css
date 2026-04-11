@@ -1,0 +1,154 @@
+/* =============================================
+   LAYOUT PRINCIPAL
+   ============================================= */
+.app-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* =============================================
+   LOADER
+   ============================================= */
+.app-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+/* =============================================
+   CONTEÚDO PRINCIPAL (Mapa + Painel)
+   ============================================= */
+.app-content {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* =============================================
+   PAINEL DO MAPA
+   ============================================= */
+.map-panel {
+  flex: 7;
+  height: 100%;
+  position: relative; /* ancora o overlay flutuante */
+}
+
+/* =============================================
+   PAINEL LATERAL (Busca + Lista) — apenas desktop
+   ============================================= */
+.side-panel {
+  flex: 3;
+  height: 100%;
+  background-color: #f7f8f9;
+  border-left: 1px solid #c3c6d4;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* =============================================
+   OVERLAY FLUTUANTE — visível APENAS no mobile
+   ============================================= */
+.mobile-overlay-panel {
+  display: none; /* oculto por padrão, aparece via @media */
+}
+
+/* =============================================
+   ESTADO DE ERRO / SEM CONTEXTO
+   ============================================= */
+.no-context {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  gap: 12px;
+}
+
+/* =============================================
+   RESPONSIVO — MOBILE (< 768px)
+   ============================================= */
+@media (max-width: 768px) {
+
+  /* Esconde o painel lateral — no mobile só existe o overlay */
+  .side-panel {
+    display: none;
+  }
+
+  /* Mapa ocupa todo o espaço disponível */
+  .map-panel {
+    flex: 1;
+    height: 100%;
+  }
+
+  /* Painel flutuante aparece sobre o mapa */
+  .mobile-overlay-panel {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 33%;
+    min-width: 200px;
+    max-width: 320px;
+    z-index: 1000;
+    border-radius: 12px;
+    /* overflow:hidden REMOVIDO — causava clipping no dropdown do Vibe */
+    overflow: visible;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    background-color: #fff;
+
+    /* Por padrão, apenas o botão é visível (content fica colapsado) */
+  }
+
+  /* Botão de toggle — sempre visível */
+  .mobile-list-toggle {
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    background: linear-gradient(135deg, #0073ea, #0060c8);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 12px;
+    transition: border-radius 0.2s ease;
+    letter-spacing: 0.01em;
+  }
+
+  /* Quando aberto, remove o border-radius inferior do botão */
+  .mobile-overlay-panel.open .mobile-list-toggle {
+    border-radius: 12px 12px 0 0;
+  }
+
+  /* Conteúdo do overlay (SearchBar + CountryList) */
+  .mobile-overlay-content {
+    display: none;
+    flex-direction: column;
+    max-height: 55vh;
+    overflow-y: auto;
+    overflow-x: visible; /* permite dropdown abrir lateralmente se necessário */
+    background-color: #f7f8f9;
+    border-top: 1px solid #c3c6d4;
+    border-radius: 0 0 12px 12px; /* mantém visual do painel */
+  }
+
+  /* Quando open, mostra o conteúdo */
+  .mobile-overlay-panel.open .mobile-overlay-content {
+    display: flex;
+  }
+}
+
+/* =============================================
+   RESPONSIVO — DESKTOP (>= 768px)
+   ============================================= */
+@media (min-width: 769px) {
+
+  /* Garante que o overlay mobile NÃO aparece no desktop */
+  .mobile-overlay-panel {
+    display: none !important;
+  }
+}
